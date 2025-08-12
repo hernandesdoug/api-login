@@ -1,6 +1,4 @@
-const { response } = require("express");
 const express = require("express");
-const sequelize = require("../models/sequelize");
 const Users = require("../models/users");
 
 const usersRoutes = express.Router();
@@ -21,22 +19,26 @@ usersRoutes.get("/users/:id", async(request, response) => {
 usersRoutes.post("/users/login", async(request, response) => {
     try{
         const {email, password} = request.body;
-        const user = await Users.findOne({where: email});
-
+        console.log(email);
+        console.log(password);
+        const user = await Users.findOne({where: {email: email}});
+        console.log(user);
         if (!user) {
             return response.status(400).json({
                 message: "User does not exist!", 
                 type: "error"});
         }
 
-        const isMatch = await compare(password, user.password);
-        if (!isMatch) {
+        if (password !== user.password) {
             return response.status(400).json({
                 message: "Incorrect Password",
                 type: "error",
             });
         }
-        response.send("Login Successfully!")
+        return response.status(200).json({
+            message: "Login Successfully!",
+            type: "ok",
+            })
     } catch (error) {
       response.status(500).json({
         message: "Login Failed!",
