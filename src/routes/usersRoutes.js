@@ -48,9 +48,78 @@ usersRoutes.post("/users/login", async(request, response) => {
 });
 
 usersRoutes.post("/users", async(request, response) => {
-    const body = request.body;
-    const result = await Users.create(body);
-    response.json(result);
+    try {
+        const {fullName, email, dateBirth, phoneNumber, password, 
+               cfPassword, nationality, documentType} = request.body;
+        
+        if (!fullName){
+            return response.status(400).json({
+                message: "Please, enter with your full name!",
+                type: "error",
+            });
+        }
+
+        if (!email){
+            return response.status(400).json({
+                message: "Please, enter with your email",
+                type: "error",
+            });
+        }
+
+        if (!dateBirth){
+            return response.status(400).json({
+                message: "Please, enter with your date of birth",
+                type: "error",
+            });
+        }
+
+        if (!phoneNumber){
+            return response.status(400).json({
+                message: "Please, enter with your phone Number",
+                type: "error",
+            });
+        }
+
+        if(password !== cfPassword) {
+            return response.status(400).json({
+                message: "Passwords Don't Match!",
+                type: "error",
+            });
+        }
+
+        if(password === "") {
+            return response.status(400).json({
+                message: "Please, type your password",
+                type: "error",
+            });
+        }
+
+        if (!nationality){
+            return response.status(400).json({
+                message: "Please, select your nationality",
+                type: "error",
+            });
+        }
+
+        if (!documentType){
+            return response.status(400).json({
+                message: "Please, select a valid document type!",
+                type: "error",
+            });
+        }
+        const newUser = new Users({fullName, email, dateBirth, phoneNumber, password, 
+            nationality, documentType})
+        await newUser.save();
+        response.status(201).json({
+            message: "User created successfully",
+        })
+        
+    } catch (error) {
+        response.status(500).json({
+            message: "Sign Up Failed!",
+            type: "error",
+        });
+    }  
 });
 
 usersRoutes.put("/users/:id", async(request, response) => {
