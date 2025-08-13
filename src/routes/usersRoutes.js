@@ -38,6 +38,7 @@ usersRoutes.post("/users/login", async(request, response) => {
         return response.status(200).json({
             message: "Login Successfully!",
             type: "success",
+            id: user.id,
             })
     } catch (error) {
       response.status(500).json({
@@ -113,6 +114,7 @@ usersRoutes.post("/users", async(request, response) => {
         response.status(201).json({
             message: "User created successfully",
             type: "success",
+            id: newUser.id,
         })
         
     } catch (error) {
@@ -125,6 +127,7 @@ usersRoutes.post("/users", async(request, response) => {
 
 usersRoutes.put("/users/:id", async(request, response) => {
     const id = request.params.id;
+    const body = request.body;
     const result = await Users.update(body, {
         where: { id }
     });
