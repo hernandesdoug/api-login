@@ -37,7 +37,7 @@ usersRoutes.post("/users/login", async(request, response) => {
         }
         return response.status(200).json({
             message: "Login Successfully!",
-            type: "ok",
+            type: "success",
             })
     } catch (error) {
       response.status(500).json({
@@ -112,6 +112,7 @@ usersRoutes.post("/users", async(request, response) => {
         await newUser.save();
         response.status(201).json({
             message: "User created successfully",
+            type: "success",
         })
         
     } catch (error) {
