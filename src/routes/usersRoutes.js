@@ -135,10 +135,22 @@ usersRoutes.put("/users/:id", async(request, response) => {
 });
 
 usersRoutes.delete("/users/:id", async (request, response) => {
-    const id = request.params.id;
-    const result = await Users.destroy({
-        where: {id}
-    });
-    response.json(result);
+    try {
+        const id = request.params.id;
+        const result = await Users.destroy({
+            where: {id}
+        });
+        console.log(result);
+        response.status(201).json({
+            message: "User deleted successfully",
+            type: "success"
+        })
+    } catch (error) {
+        response.status(500).json({
+            message: "Sign Up Failed!",
+            type: "error",
+        });
+    }
+
 });
 module.exports = usersRoutes;
