@@ -39,7 +39,7 @@ usersRoutes.post("/users/login", async(request, response) => {
             message: "Login Successfully!",
             type: "success",
             id: user.id,
-            })
+        })
     } catch (error) {
       response.status(500).json({
         message: "Login Failed!",
