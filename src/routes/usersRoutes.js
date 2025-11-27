@@ -73,8 +73,9 @@ usersRoutes.post("/users", async(request, response) => {
                 type: "error",
             });
         }
-
+         console.log(phoneNumber);
         if (!phoneNumber){
+            console.log("entrou aqui")
             return response.status(400).json({
                 message: "Please, enter with your phone Number",
                 type: "error",
