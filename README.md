@@ -64,7 +64,7 @@ O servidor iniciará na porta `3333`.
 ## 🛣️ Rotas da API
 
 | Rota | Método | Descrição | Corpo da Requisição (JSON) | Protegida por Token? |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | `/users` | `GET` | Lista todos os usuários (com senha oculta) | N/A | Sim |
 | `/users/:id` | `GET` | Busca um usuário por ID (com senha oculta) | N/A | Sim |
 | `/users` | `POST` | Cadastra um novo usuário (Gera hash Bcrypt da senha) | `{ fullName, email, dateBirth, phoneNumber, password, cfPassword, nationality, documentType }` | Não |
