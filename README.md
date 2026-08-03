@@ -9,9 +9,9 @@ Esta é uma API RESTful para cadastro e login de usuários, desenvolvida em **No
 - **Runtime:** Node.js
 - **Framework Web:** Express
 - **ORM:** Sequelize (MySQL)
-- **Criptografia:** Bcrypt (hashing de senhas)
+- **Autenticação e Criptografia:** JWT e Bcrypt (hashing de senhas)
 - **Ambiente e Auxiliares:** Dotenv, Cors, Nodemon
-
+- **Documentação da API:** Swagger
 ---
 
 ## 🚀 Como Executar o Projeto Localmente
@@ -49,6 +49,8 @@ DATABASE_NAME=api_login
 DATABASE_USER=seu_usuario_do_mysql
 DATABASE_PASSWORD=sua_senha_do_mysql
 DATABASE_HOST=127.0.0.1
+DATABASE_PORT= 3306
+JWT_SECRET_KEY=sua_chave_secreta_jwt_aqui
 ```
 
 ### 4. Iniciar em Modo de Desenvolvimento
@@ -61,16 +63,33 @@ O servidor iniciará na porta `3333`.
 
 ## 🛣️ Rotas da API
 
-| Rota | Método | Descrição | Corpo da Requisição (JSON) |
+| Rota | Método | Descrição | Corpo da Requisição (JSON) | Protegida por Token? |
 | --- | --- | --- | --- |
-| `/users` | `GET` | Lista todos os usuários (com senha oculta) | N/A |
-| `/users/:id` | `GET` | Busca um usuário por ID (com senha oculta) | N/A |
-| `/users` | `POST` | Cadastra um novo usuário (Gera hash Bcrypt da senha) | `{ fullName, email, dateBirth, phoneNumber, password, cfPassword, nationality, documentType }` |
-| `/users/login` | `POST` | Valida credenciais (Compara hash com Bcrypt) | `{ email, password }` |
-| `/users/:id` | `PUT` | Atualiza informações do usuário | `{ fullName, email, dateBirth, phoneNumber, password, nationality, documentType }` |
-| `/users/:id` | `DELETE` | Exclui um usuário do sistema | N/A |
+| `/users` | `GET` | Lista todos os usuários (com senha oculta) | N/A | Sim |
+| `/users/:id` | `GET` | Busca um usuário por ID (com senha oculta) | N/A | Sim |
+| `/users` | `POST` | Cadastra um novo usuário (Gera hash Bcrypt da senha) | `{ fullName, email, dateBirth, phoneNumber, password, cfPassword, nationality, documentType }` | Não |
+| `/users/login` | `POST` | Valida credenciais (Compara hash com Bcrypt) | `{ email, password }` | Não |
+| `/users/:id` | `PUT` | Atualiza informações do usuário | `{ fullName, email, dateBirth, phoneNumber, password, nationality, documentType }` | Sim |
+| `/users/:id` | `DELETE` | Exclui um usuário do sistema | N/A | Sim |
 
 ---
+
+## Documentação Swagger
+
+Após iniciar a API:
+
+http://localhost:3333/api-docs
+
+## Autenticação
+
+A API utiliza JWT.
+
+1. Faça login em `/users/login`
+2. Copie o token retornado
+3. Clique em Authorize no Swagger
+4. Informe:
+
+Bearer SEU_TOKEN
 
 ## 📐 Padrões e Boas Práticas Adotadas
 
