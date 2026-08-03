@@ -8,8 +8,9 @@ const getAllUsers = async (request, response) => {
         });
         response.json(result);
     } catch (error) {
-        response.status(500).json({
-            message: "Failed to fetch users",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
             type: "error"
         });
     }
@@ -30,8 +31,9 @@ const getUserById = async (request, response) => {
         }
         response.json(result);
     } catch (error) {
-        response.status(500).json({
-            message: "Failed to fetch user",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
             type: "error"
         });
     }
@@ -48,30 +50,29 @@ const loginUser = async (request, response) => {
             })
         }
 
-        const user = await Users.findOne({ where: { email: email } });
+        const user = await Users.findOne({ where: { email } });
         if (!user) {
-            return response.status(400).json({
-                message: "User does not exist!",
+            return response.status(401).json({
+                message: "Invalid email or password",
                 type: "error"
             });
         }
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return response.status(400).json({
-                message: "Incorrect Password",
+            return response.status(401).json({
+                message: "Invalid email or password",
                 type: "error",
             });
         }
         return response.status(200).json({
             message: "Login Successfully!",
             type: "success",
-            id: user.id,
         })
     } catch (error) {
-        response.status(500).json({
-            message: "Login Failed!",
-            type: "error",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
+            type: "error"
         });
     }
 };
@@ -116,7 +117,7 @@ const createUser = async (request, response) => {
             });
         }
 
-        if (password === "") {
+        if (!password) {
             return response.status(400).json({
                 message: "Please, type your password",
                 type: "error",
@@ -139,7 +140,7 @@ const createUser = async (request, response) => {
 
         const existingUser = await Users.findOne({ where: { email } });
         if (existingUser) {
-            return response.status(400).json({
+            return response.status(409).json({
                 message: "Email already registered!",
                 type: "error",
             });
@@ -161,13 +162,13 @@ const createUser = async (request, response) => {
         response.status(201).json({
             message: "User created successfully",
             type: "success",
-            id: newUser.id,
         })
 
     } catch (error) {
-        response.status(500).json({
-            message: "Sign Up Failed!",
-            type: "error",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
+            type: "error"
         });
     }
 };
@@ -190,21 +191,19 @@ const updateUser = async (request, response) => {
             updatedData.password = await bcrypt.hash(password, 10);
         }
 
-        await Users.update(updatedData, {
-            where: { id }
-        });
+        await user.update(updatedData);
 
         response.status(200).json({
             message: "User updated successfully",
             type: "success"
         })
     } catch (error) {
-        response.status(500).json({
-            message: "Update Failed!",
-            type: "error",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
+            type: "error"
         });
     }
-
 };
 
 const deleteUser = async (request, response) => {
@@ -224,12 +223,12 @@ const deleteUser = async (request, response) => {
             type: "success"
         })
     } catch (error) {
-        response.status(500).json({
-            message: "Delete Failed!",
-            type: "error",
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
+            type: "error"
         });
     }
-
 };
 module.exports = {
     getAllUsers,
