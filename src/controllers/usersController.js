@@ -1,5 +1,6 @@
 const Users = require("../models/users");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = async (request, response) => {
     try {
@@ -51,7 +52,9 @@ const loginUser = async (request, response) => {
         }
 
         const user = await Users.findOne({ where: { email } });
+        console.log(user);
         if (!user) {
+            console.log("Passou aqui?")
             return response.status(401).json({
                 message: "Invalid email or password",
                 type: "error"
@@ -59,11 +62,22 @@ const loginUser = async (request, response) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
+            console.log("senha nao tem hash!")
             return response.status(401).json({
                 message: "Invalid email or password",
                 type: "error",
             });
         }
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email
+            },
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: "1h"
+            }
+        );
         return response.status(200).json({
             message: "Login Successfully!",
             type: "success",
@@ -111,12 +125,12 @@ const createUser = async (request, response) => {
             });
         }
 
-        if (password !== cfPassword) {
+       /* if (password !== cfPassword) {
             return response.status(400).json({
                 message: "Passwords Don't Match!",
                 type: "error",
             });
-        }
+        }*/
 
         if (!password) {
             return response.status(400).json({

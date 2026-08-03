@@ -36,6 +36,47 @@ const usersRoutes = express.Router();
  *         description: Email ou senha inválidos
  */
 usersRoutes.post("/users/login", loginUser);
+/**
+ * @swagger
+* /users:
+ *   post:
+ *     summary: Cadastro do usuario
+ *     description: cadastra usuario 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 example: usuario@email.com
+ *               password:
+ *                 type: string
+ *                 example: 12345678
+ *               phoneNumber:
+ *                 type: int
+ *                 example: 11999999999
+ *               nationality:
+ *                 type: string
+ *                 example: Brazil
+ *               documentType:
+ *                 type: string
+ *                 example: CPF 
+ *               dateBirth:
+ *                  type: date
+ *                  example: 01/01/1900           
+ *     responses:
+ *       201:
+ *         description: Usuario criado com sucesso
+ *       400:
+ *         description: campo obrigatorio
+ *       409:
+ *          description: usuario ja cadastrado
+ */
 usersRoutes.post("/users", createUser);
 /**
  * @swagger
