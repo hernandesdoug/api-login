@@ -10,7 +10,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:3333"
+                url: "https://api-login-production-c8ea.up.railway.app/"
             }
         ],
         components: {
