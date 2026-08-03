@@ -10,7 +10,11 @@ const options = {
         },
         servers: [
             {
+<<<<<<< HEAD
                 url: process.env.API_URL || "http://localhost:3333"
+=======
+                url: "https://api-login-production-c8ea.up.railway.app/"
+>>>>>>> refs/remotes/origin/main
             }
         ],
         components: {
