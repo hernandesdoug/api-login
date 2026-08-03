@@ -1,172 +1,19 @@
 const express = require("express");
-const Users = require("../models/users");
+const { getAllUsers,
+    getUserById,
+    loginUser,
+    createUser,
+    updateUser,
+    deleteUser,
+} = require("../controllers/usersController");
 
 const usersRoutes = express.Router();
 
-usersRoutes.get("/users", async (request, response) => {
-    const result = await Users.findAll();
-    response.json(result);
-});
+usersRoutes.get("/users", getAllUsers);
+usersRoutes.get("/users/:id", getUserById);
+usersRoutes.post("/users/login", loginUser);
+usersRoutes.post("/users", createUser);
+usersRoutes.put("/users/:id", updateUser);
+usersRoutes.delete("/users/:id", deleteUser);
 
-usersRoutes.get("/users/:id", async (request, response) => {
-    const id = request.params.id;
-    const result = await Users.findOne({
-        where: { id }
-    });
-    response.json(result);
-});
-
-usersRoutes.post("/users/login", async (request, response) => {
-    try {
-        const { email, password } = request.body;
-        console.log(email);
-        console.log(password);
-        const user = await Users.findOne({ where: { email: email } });
-        console.log(user);
-        if (!user) {
-            return response.status(400).json({
-                message: "User does not exist!",
-                type: "error"
-            });
-        }
-
-        if (password !== user.password) {
-            return response.status(400).json({
-                message: "Incorrect Password",
-                type: "error",
-            });
-        }
-        return response.status(200).json({
-            message: "Login Successfully!",
-            type: "success",
-            id: user.id,
-        })
-    } catch (error) {
-        response.status(500).json({
-            message: "Login Failed!",
-            type: "error",
-        });
-    }
-});
-
-usersRoutes.post("/users", async (request, response) => {
-    try {
-        const { fullName, email, dateBirth, phoneNumber, password,
-            cfPassword, nationality, documentType } = request.body;
-
-        if (!fullName) {
-            return response.status(400).json({
-                message: "Please, enter with your full name!",
-                type: "error",
-            });
-        }
-
-        if (!email) {
-            return response.status(400).json({
-                message: "Please, enter with your email",
-                type: "error",
-            });
-        }
-
-        if (!dateBirth) {
-            return response.status(400).json({
-                message: "Please, enter with your date of birth",
-                type: "error",
-            });
-        }
-        console.log(phoneNumber);
-        if (!phoneNumber) {
-            console.log("entrou aqui")
-            return response.status(400).json({
-                message: "Please, enter with your phone Number",
-                type: "error",
-            });
-        }
-
-        if (password !== cfPassword) {
-            return response.status(400).json({
-                message: "Passwords Don't Match!",
-                type: "error",
-            });
-        }
-
-        if (password === "") {
-            return response.status(400).json({
-                message: "Please, type your password",
-                type: "error",
-            });
-        }
-
-        if (!nationality) {
-            return response.status(400).json({
-                message: "Please, select your nationality",
-                type: "error",
-            });
-        }
-
-        if (!documentType) {
-            return response.status(400).json({
-                message: "Please, select a valid document type!",
-                type: "error",
-            });
-        }
-        const newUser = new Users({
-            fullName, email, dateBirth, phoneNumber, password,
-            nationality, documentType
-        })
-        await newUser.save();
-        response.status(201).json({
-            message: "User created successfully",
-            type: "success",
-            id: newUser.id,
-        })
-
-    } catch (error) {
-        response.status(500).json({
-            message: "Sign Up Failed!",
-            type: "error",
-        });
-    }
-});
-
-usersRoutes.put("/users/:id", async (request, response) => {
-    try {
-        const id = request.params.id;
-        const body = request.body;
-        const result = await Users.update(body, {
-            where: { id }
-        });
-        console.log(result);
-        response.status(201).json({
-            message: "User updated successfully",
-            type: "success"
-        })
-    } catch (error) {
-        response.status(500).json({
-            message: "Update Failed!",
-            type: "error",
-        });
-    }
-
-});
-
-usersRoutes.delete("/users/:id", async (request, response) => {
-    try {
-        const id = request.params.id;
-        const result = await Users.destroy({
-            where: { id }
-        });
-        console.log(result);
-        response.status(201).json({
-            message: "User deleted successfully",
-            type: "success"
-        })
-    } catch (error) {
-        response.status(500).json({
-            message: "Delete Failed!",
-            type: "error",
-        });
-    }
-
-});
 module.exports = usersRoutes;
