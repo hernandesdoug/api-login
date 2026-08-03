@@ -67,6 +67,7 @@ const loginUser = async (request, response) => {
         return response.status(200).json({
             message: "Login Successfully!",
             type: "success",
+            token
         })
     } catch (error) {
         console.error(error);
