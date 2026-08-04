@@ -117,6 +117,32 @@ usersRoutes.get("/users", authMiddleware, getAllUsers);
 usersRoutes.get("/users/:id", authMiddleware, getUserById);
 /**
  * @swagger
+ * /users/password:
+ *   put:
+ *     summary: Atualiza a senha do usuário autenticado
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: NovaSenha123
+ *     responses:
+ *       200:
+ *         description: Senha atualizada com sucesso
+ *       400:
+ *         description: Senha não informada
+ *       404:
+ *         description: Usuário não encontrado
+ */
+usersRoutes.put("/users/password", authMiddleware, updatePassword);
+/**
+ * @swagger
  * /users/{id}:
  *   put:
  *     summary: Atualiza os dados do usuário
@@ -182,31 +208,5 @@ usersRoutes.put("/users/:id", authMiddleware, updateUser);
  *         description: Usuário não encontrado
  */
 usersRoutes.delete("/users/:id", authMiddleware, deleteUser);
-/**
- * @swagger
- * /users/password:
- *   put:
- *     summary: Atualiza a senha do usuário autenticado
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               password:
- *                 type: string
- *                 example: NovaSenha123
- *     responses:
- *       200:
- *         description: Senha atualizada com sucesso
- *       400:
- *         description: Senha não informada
- *       404:
- *         description: Usuário não encontrado
- */
-usersRoutes.post("/users/password/:id", authMiddleware, updatePassword);
 
 module.exports = usersRoutes;
