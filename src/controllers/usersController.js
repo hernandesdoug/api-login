@@ -95,7 +95,7 @@ const loginUser = async (request, response) => {
 const createUser = async (request, response) => {
     try {
         const { fullName, email, dateBirth, phoneNumber, password,
-            cfPassword, nationality, documentType } = request.body;
+            nationality, documentType } = request.body;
 
         if (!fullName) {
             return response.status(400).json({
@@ -124,14 +124,6 @@ const createUser = async (request, response) => {
                 type: "error",
             });
         }
-
-       /* if (password !== cfPassword) {
-            return response.status(400).json({
-                message: "Passwords Don't Match!",
-                type: "error",
-            });
-        }*/
-
         if (!password) {
             return response.status(400).json({
                 message: "Please, type your password",
@@ -191,7 +183,7 @@ const createUser = async (request, response) => {
 const updateUser = async (request, response) => {
     try {
         const id = request.params.id;
-        const { fullName, email, dateBirth, phoneNumber, password, nationality, documentType } = request.body;
+        const { fullName, email, dateBirth, phoneNumber, nationality, documentType } = request.body;
 
         const user = await Users.findByPk(id);
         if (!user) {
@@ -201,10 +193,6 @@ const updateUser = async (request, response) => {
             });
         }
         const updatedData = { fullName, email, dateBirth, phoneNumber, nationality, documentType };
-
-        if (password) {
-            updatedData.password = await bcrypt.hash(password, 10);
-        }
 
         await user.update(updatedData);
 
@@ -245,11 +233,45 @@ const deleteUser = async (request, response) => {
         });
     }
 };
+
+const updatePassword = async (request, response) => {
+    try {
+        const { id } = request.user;
+        const { password } = request.body;
+        const user = await Users.findByPk(id);
+        if (!user) {
+            return response.status(404).json({
+                message: "User not found",
+                type: "error"
+            });
+        }
+        if (!password) {
+            return response.status(400).json({
+                message: "Password is required",
+                type: "error"
+            });
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await user.update({password: hashedPassword});
+        response.status(200).json({
+            message: "Password updated successfully",
+            type: "success"
+        })
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json({
+            message: "Internal server error",
+            type: "error"
+        });
+    }
+};
+
 module.exports = {
     getAllUsers,
     getUserById,
     loginUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    updatePassword
 };

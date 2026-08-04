@@ -6,10 +6,10 @@ const { getAllUsers,
     createUser,
     updateUser,
     deleteUser,
+    updatePassword,
 } = require("../controllers/usersController");
 
 const usersRoutes = express.Router();
-
 /**
  * @swagger
  * /users/login:
@@ -58,8 +58,8 @@ usersRoutes.post("/users/login", loginUser);
  *                 type: string
  *                 example: 12345678
  *               phoneNumber:
- *                 type: int
- *                 example: 11999999999
+ *                 type: string
+ *                 example: +5511999999999
  *               nationality:
  *                 type: string
  *                 example: Brazil
@@ -67,8 +67,9 @@ usersRoutes.post("/users/login", loginUser);
  *                 type: string
  *                 example: CPF 
  *               dateBirth:
- *                  type: date
- *                  example: 01/01/1900           
+ *                  type: string
+ *                  format: date
+ *                  example: 1900-01-01           
  *     responses:
  *       201:
  *         description: Usuario criado com sucesso
@@ -93,8 +94,119 @@ usersRoutes.post("/users", createUser);
  *         description: Token não informado
  */
 usersRoutes.get("/users", authMiddleware, getAllUsers);
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Retorna um usuário pelo id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     description: Retorna usuário cadastrado sem exibir senha
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Usuário retornado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ */
 usersRoutes.get("/users/:id", authMiddleware, getUserById);
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Atualiza os dados do usuário
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 example: usuario@email.com
+ *               phoneNumber:
+ *                 type: string
+ *                 example: +5511999999999
+ *               nationality:
+ *                 type: string
+ *                 example: Brazil
+ *               documentType:
+ *                 type: string
+ *                 example: CPF 
+ *               dateBirth:
+ *                  type: string
+ *                  format: date
+ *                  example: 1900-01-01           
+ *     description: Atualiza usuário cadastrado sem exibir senha
+ *     responses:
+ *       200:
+ *         description: Usuário atualizado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ */
 usersRoutes.put("/users/:id", authMiddleware, updateUser);
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Deleta um usuário pelo id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     description: Exclui usuário
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Usuário deletado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ */
 usersRoutes.delete("/users/:id", authMiddleware, deleteUser);
+/**
+ * @swagger
+ * /users/password:
+ *   put:
+ *     summary: Atualiza a senha do usuário autenticado
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: NovaSenha123
+ *     responses:
+ *       200:
+ *         description: Senha atualizada com sucesso
+ *       400:
+ *         description: Senha não informada
+ *       404:
+ *         description: Usuário não encontrado
+ */
+usersRoutes.post("/users/password/:id", authMiddleware, updatePassword);
 
 module.exports = usersRoutes;
