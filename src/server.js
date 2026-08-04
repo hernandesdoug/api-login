@@ -1,6 +1,5 @@
 const dotenv = require("dotenv");
 const path = require("path");
-const sequelize = require('../config/database');
 
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
@@ -24,10 +23,7 @@ app.use(
 );
 
 const PORT = process.env.PORT || 3333;
-sequelize.sync().then(() => {
-  app.listen(process.env.PORT || 3333, () => {
-    console.log("Servidor rodando e tabelas prontas!");
-  });
-}).catch((err) => {
-  console.error("Erro ao sincronizar o banco:", err);
+
+app.listen(process.env.PORT || 3333, () => {
+    console.log("Servidor rodando");
 });
