@@ -4,7 +4,7 @@ Esta é uma API RESTful para cadastro e login de usuários, desenvolvida em **No
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Runtime:** Node.js
 - **Framework Web:** Express
@@ -16,7 +16,7 @@ Esta é uma API RESTful para cadastro e login de usuários, desenvolvida em **No
 - **Padronização de Código:** ESLinter+Prettier
 ---
 
-## 🚀 Como Executar o Projeto Localmente
+## Como Executar o Projeto Localmente
 
 ### 1. Clonar e Instalar Dependências
 
@@ -68,7 +68,7 @@ O servidor iniciará na porta `3333`.
 
 ---
 
-## 🛣️ Rotas da API
+## Rotas da API
 
 | Rota           | Método   | Descrição                                            | Corpo da Requisição (JSON)                                                                     | Protegida por Token? |
 | -------------- | -------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------- |
@@ -98,9 +98,3 @@ A API utiliza JWT.
 
 Bearer SEU_TOKEN
 
-## 📐 Padrões e Boas Práticas Adotadas
-
-1. **Separação de Responsabilidades (MVC):** Divisão clara entre rotas (`src/routes/`) e controladores (`src/controllers/`) para melhorar a manutenibilidade do código.
-2. **Segurança (Hashing de Senha):** Utilização do pacote `bcrypt` para criptografar as senhas no cadastro e compará-las de forma segura no login.
-3. **Integridade de Dados:** Checagem de e-mail duplicado no cadastro de usuários para evitar sobreposições.
-4. **Proteção de Informações Sensíveis:** Exclusão do campo `password` nas respostas HTTP que retornam os dados de perfil dos usuários (`attributes: { exclude: ["password"] }`).
