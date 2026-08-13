@@ -1,7 +1,7 @@
-const app = require("./app");
+const app = require('./app');
 
 const PORT = process.env.PORT || 3333;
 
-app.listen(process.env.PORT || 3333, () => {
-    console.log("Servidor rodando");
+app.listen(PORT || 3333, () => {
+  console.log('Servidor rodando');
 });
