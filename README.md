@@ -1,4 +1,4 @@
-# 🔑 API de criação e autenticação de usuários 
+# API de criação e autenticação de usuários
 
 Esta é uma API RESTful para cadastro e login de usuários, desenvolvida em **Node.js** com **Express** e o ORM **Sequelize** integrado ao banco de dados **MySQL**.
 
@@ -12,8 +12,10 @@ Esta é uma API RESTful para cadastro e login de usuários, desenvolvida em **No
 - **Autenticação e Criptografia:** JWT e Bcrypt (hashing de senhas)
 - **Ambiente e Auxiliares:** Dotenv, Cors, Nodemon
 - **Documentação da API:** Swagger
-- **Testes:** Jest 
+- **Testes:** Jest
 - **Padronização de Código:** ESLinter+Prettier
+- **Limit rating:** express-rate-limit
+
 ---
 
 ## Como Executar o Projeto Localmente
@@ -70,14 +72,16 @@ O servidor iniciará na porta `3333`.
 
 ## Rotas da API
 
-| Rota           | Método   | Descrição                                            | Corpo da Requisição (JSON)                                                                     | Protegida por Token? |
-| -------------- | -------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------- |
-| `/users`       | `GET`    | Lista todos os usuários (com senha oculta)           | N/A                                                                                            | Sim                  |
-| `/users/:id`   | `GET`    | Busca um usuário por ID (com senha oculta)           | N/A                                                                                            | Sim                  |
-| `/users`       | `POST`   | Cadastra um novo usuário (Gera hash Bcrypt da senha) | `{ fullName, email, dateBirth, phoneNumber, password, cfPassword, nationality, documentType }` | Não                  |
-| `/users/login` | `POST`   | Valida credenciais (Compara hash com Bcrypt)         | `{ email, password }`                                                                          | Não                  |
-| `/users/:id`   | `PUT`    | Atualiza informações do usuário                      | `{ fullName, email, dateBirth, phoneNumber, password, nationality, documentType }`             | Sim                  |
-| `/users/:id`   | `DELETE` | Exclui um usuário do sistema                         | N/A                                                                                            | Sim                  |
+| Rota              | Método   | Descrição                                            | Corpo da Requisição (JSON)                                                         | Protegida por Token? |
+| ----------------- | -------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------- |
+| `/users`          | `GET`    | Lista todos os usuários (com senha oculta)           | N/A                                                                                | Sim                  |
+| `/users/:id`      | `GET`    | Busca um usuário por ID (com senha oculta)           | N/A                                                                                | Sim                  |
+| `/users`          | `POST`   | Cadastra um novo usuário (Gera hash Bcrypt da senha) | `{ fullName, email, dateBirth, phoneNumber, password, nationality, documentType }` | Não                  |
+| `/users/login`    | `POST`   | Valida credenciais (Compara hash com Bcrypt)         | `{ email, password }`                                                              | Não                  |
+| `/users/:id`      | `PUT`    | Atualiza informações do usuário                      | `{ fullName, email, dateBirth, phoneNumber, password, nationality, documentType }` | Sim                  |
+| `/users/:id`      | `DELETE` | Exclui um usuário do sistema                         | N/A                                                                                | Sim                  |
+| `/users/password` | `PUT`    | atualiza senha do usuário                            | N/A                                                                                | Sim                  |
+| `/users/logout`   | `POST`   | faz logout do sistema                                | N/A                                                                                | Sim                  |
 
 ---
 
@@ -97,4 +101,3 @@ A API utiliza JWT.
 4. Informe:
 
 Bearer SEU_TOKEN
-
